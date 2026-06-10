@@ -1,2 +1,2 @@
-# MemeOS
-A WebOS based enterly on my favorite memes.
+# RetrOS
+A WebOS inspired by  retro OperatingSystems with my very own touch of fun.
