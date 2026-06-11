@@ -1,0 +1,66 @@
+.window {
+  border: solid;
+  width: fit-content;
+  border-radius: 12px;
+  padding: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  background-color: #2e2e3a;
+  color: #50fa7b;
+  margin: -12px -12px 12px -12px;
+  padding: 8px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: 2px dashed #50fa7b;
+  font-size: 0.9rem;
+}
+
+.selected {
+  background-color: rgba(0, 120, 215, 0.3);
+  outline: 1.5px solid rgba(0, 120, 215, 0.6);
+  border-radius: 3px;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+
+.memo-item {
+  background-color: #2a2a3d;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #3d3d5c;
+  transition: background 0.2s;
+}
+
+.memo-item:hover {
+  background-color: #3d3d5c;
+}
+
+#hobby-list div {
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+#hobby-list div:hover {
+  background: #2d2d3f !important;
+  transform: translateX(4px);
+}
+.hobby-batch-cb {
+  cursor: pointer;
+  accent-color: #ff5555;
+  width: 16px;
+  height: 16px;
+}
