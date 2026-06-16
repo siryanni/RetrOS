@@ -151,3 +151,79 @@ function updateClock() {
   el.innerHTML = "<br>" + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
 }
 setInterval(updateClock, 1000); updateClock();
+
+// Fenster für die neuen Apps beim System registrieren
+initializeWindow("paintscreen", "paintclose");
+initializeWindow("petscreen", "petclose");
+
+// --- LOGIK: PIXELPAINT ---
+const canvas = document.getElementById("paintCanvas");
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+
+  canvas.addEventListener("mousedown", () => drawing = true);
+  canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener("mousemove", draw);
+
+  function draw(e) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = document.getElementById("paint-color").value;
+
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  }
+}
+function clearCanvas() {
+  const canvas = document.getElementById("paintCanvas");
+  if (canvas) canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// --- LOGIK: RETROPET ---
+let hunger = parseInt(localStorage.getItem("retros_pet_hunger")) || 100;
+
+function updatePetUI() {
+  const hungerEl = document.getElementById("pet-hunger");
+  const avatarEl = document.getElementById("pet-avatar");
+  const statusEl = document.getElementById("pet-status");
+  if (!hungerEl) return;
+
+  hungerEl.innerText = "Hunger: " + hunger + "%";
+  if (hunger <= 0) {
+    avatarEl.innerText = "👻";
+    statusEl.innerText = "Status: Dead... RIP";
+    statusEl.style.color = "#ff5555";
+  } else if (hunger < 40) {
+    avatarEl.innerText = "😾";
+    statusEl.innerText = "Status: Starving!";
+    statusEl.style.color = "#ffb86c";
+  } else {
+    avatarEl.innerText = "🐱";
+    statusEl.innerText = "Status: Happy";
+    statusEl.style.color = "#50fa7b";
+  }
+}
+
+function feedPet() {
+  if (hunger <= 0) { hunger = 100; } // Wiederbeleben, falls tot
+  else { hunger = Math.min(100, hunger + 20); }
+  localStorage.setItem("retros_pet_hunger", hunger);
+  updatePetUI();
+}
+
+// Lass das Haustier alle 8 Sekunden hungriger werden
+setInterval(() => {
+  if (hunger > 0) {
+    hunger = Math.max(0, hunger - 5);
+    localStorage.setItem("retros_pet_hunger", hunger);
+    updatePetUI();
+  }
+}, 8000);
+
+// Beim Start einmal die UI laden
+updatePetUI();
