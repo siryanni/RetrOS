@@ -2,52 +2,49 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body style="background-color: rgb(157, 157, 179); font-family: Didot, serif ; background-image: url(./background_new.png);
- background-size: cover; margin: 0; height: 100vh; overflow: hidden;">
+<body style="background-color: rgb(157, 157, 179); background-image: url(./background_new.png); background-size: cover; margin: 0; height: 100vh; overflow: hidden;">
 
-  <!-- TOP-BAR -->
   <div id="top" style="display: flex; justify-content: flex-start; backdrop-filter: blur(10px);
    background-color: rgba(197, 105, 105, 0.25); color: #000000; border: solid; border-radius: 12px; margin: 5px;">
-    <p id="welcomeopen" style="cursor: pointer; font-weight: bold; padding: 0 10px;">RetrOS vers0.1.5</p>
+    <p id="welcomeopen" style="cursor: pointer; font-weight: bold; padding: 0 10px;">RetrOS vers1.0.0</p>
     <p id="os-time"><br>Loading...</p>
     <p style="padding: 0 10px;">...Traveling back to the future...</p>
     <p style="padding: 0 10px;"><br>Have fun :)</p>
   </div>
  
-  <!-- DESKTOP ICONS (ALL 4 APPS) -->
   <div id="desktopApps" style="padding-top: 64px; padding-left: 16px; display: flex; gap: 10px;">
-    <!-- MicroMemo -->
-    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#micromemoscreen')" style="text-align: center;
-     padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
+    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#micromemoscreen')" style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
       <img src="./micronote_icon.png" style="width: 40px; height: 40px; border-style: groove;">
       <p style="margin: 0px; color: #fff;">MicroMemo</p>
     </div>
     
-    <!-- HobbyTrack -->
-    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#hobbytrackscreen')" style="text-align: center;
-     padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
+    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#hobbytrackscreen')" style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
       <img src="./Hobbytrack_icon.png" style="width: 40px; height: 40px; border-style: groove;">
       <p style="margin: 0px; color: #fff;">HobbyTrack</p>
     </div>
 
-    <!-- PixelPaint -->
-    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#paintscreen')" style="text-align: center;
-     padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
+    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#paintscreen')" style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
       <img src="./Screenshot 2026-06-16 143331.png" style="width: 40px; height: 40px; border-style: groove; background: #2a2a3d;">
       <p style="margin: 0px; color: #fff;">PixelPaint</p>
     </div>
 
-    <!-- RetroPet -->
-    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#petscreen')" style="text-align: center;
-     padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
+    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#petscreen')" style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
       <img src="./Screenshot 2026-06-16 143246.png" style="width: 40px; height: 40px; border-style: groove; background: #2a2a3d;">
       <p style="margin: 0px; color: #fff;">RetroPet</p>
     </div>
+  
+    <div onclick="handleIconTap(this)" ondblclick="handleIconDoubleTap('#calculatorscreen')" style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content; cursor: pointer;">
+      <img src="./Calc-95icon.png" style="width: 40px; height: 40px; border-style: groove;">
+      <p style="margin: 0px; color: #fff;">Calc-95</p>
+    </div>
   </div>
 
-  <!-- APP 1: WELCOME SCREEN -->
   <div id="welcomescreen" class="window" style="display: none;">
     <div id="welcomescreenheader" class="window-header"> 
       <span>☰ ::: KITTY-KERNEL-PANEL ::: ☰</span>
@@ -68,104 +65,61 @@
     </div>
   </div>
 
-  <!-- APP 2: MICROMEMO (DEVLOG) -->
   <div id="micromemoscreen" class="window" style="display: none;">
     <div id="micromemoscreenheader" class="window-header"> 
       <span>☰ ::: RETROS-DEVLOG ::: ☰</span>
       <span id="micromemoclose" style="color: #ff5555; cursor: pointer; padding: 0 5px; font-family: monospace;">[X]</span>
     </div>
 
-    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px;
-     width: 600px; height: 350px; display: flex; font-family: monospace; color: #fff; overflow: hidden;">
-      <div id="memo-sidebar" style="background-color: #242433; width: 180px;
-       min-width: 180px; border-right: 2px solid #111; padding: 10px; overflow-y: auto; box-sizing: border-box;"></div>
-      <div style="padding: 16px; overflow-y: auto; flex-grow: 1;
-       background-color: #1a1a24; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; height: 100%;">
-        <input type="text" id="devlog-title" placeholder="devlog title" style="background: #242433;
-         border: 1px solid #3d3d5c; color: #50fa7b; padding: 8px; border-radius: 4px; font-family: monospace;
-          font-size: 14px; outline: none;">
-        <textarea id="devlog-text" placeholder="write your log here..." style="background: #242433;
-         border: 1px solid #3d3d5c; color: #fff; padding: 8px; border-radius: 4px; font-family: monospace;
-          font-size: 12px; flex-grow: 1; resize: none; outline: none; height: 180px;"></textarea>
-        <div style="display: flex;
-         gap: 10px; justify-content: flex-end; margin-top: auto;">
-          <button onclick="clearFields()" style="background: #ff5555; border: none;
-           color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace;" new></button>
-          <button onclick="saveDevlog()" style="background: #50fa7b; border: none;
-           color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace;
-            font-weight: bold;">Save</button>
+    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 600px; height: 350px; display: flex; font-family: monospace; color: #fff; overflow: hidden;">
+      <div id="memo-sidebar" style="background-color: #242433; width: 180px; min-width: 180px; border-right: 2px solid #111; padding: 10px; overflow-y: auto; box-sizing: border-box;"></div>
+      <div style="padding: 16px; overflow-y: auto; flex-grow: 1; background-color: #1a1a24; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; height: 100%;">
+        <input type="text" id="devlog-title" placeholder="devlog title" style="background: #242433; border: 1px solid #3d3d5c; color: #50fa7b; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 14px; outline: none;">
+        <textarea id="devlog-text" placeholder="write your log here..." style="background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 12px; flex-grow: 1; resize: none; outline: none; height: 180px;"></textarea>
+        
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: auto;">
+          <button onclick="clearFields()" style="background: #ff5555; border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace;">New</button>
+          <button onclick="exportDevlog()" style="background: #ffb86c; border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace; font-weight: bold;">Export</button>
+          <button onclick="saveDevlog()" style="background: #50fa7b; border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace; font-weight: bold;">Save</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- APP 3: HOBBYTRACK -->
   <div id="hobbytrackscreen" class="window" style="display: none;">
     <div id="hobbytrackscreenheader" class="window-header"> 
       <span>☰ ::: RETROS-HOBBYTRACK ::: ☰</span>
       <span id="hobbytrackclose" style="color: #ff5555; cursor: pointer; padding: 0 5px; font-family: monospace;">[X]</span>
     </div>
 
-    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 750px;
-     height: 480px; display: flex; font-family: monospace; color: #fff; position: relative; overflow: hidden;
-      box-sizing: border-box;">
-      
+    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 750px; height: 480px; display: flex; font-family: monospace; color: #fff; position: relative; overflow: hidden; box-sizing: border-box;">
       <div id="hobby-main-view" style="display: flex; flex-direction: column; height: 100%; width: 100%;">
-        
-        <div style="display: flex; align-items: center; gap: 10px; padding: 12px;
-         background-color: #242433; border-bottom: 2px solid #111;">
-          <button id="hobby-batch-btn" onclick="toggleBatchMode()" style="background: #1a1a24;
-           border: 1px solid #3d3d5c; color: #50fa7b; padding: 6px 12px; cursor: pointer; font-weight: bold;
-            border-radius: 4px;">✔</button>
-          
+        <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background-color: #242433; border-bottom: 2px solid #111;">
+          <button id="hobby-batch-btn" onclick="toggleBatchMode()" style="background: #1a1a24; border: 1px solid #3d3d5c; color: #50fa7b; padding: 6px 12px; cursor: pointer; font-weight: bold; border-radius: 4px;">✔</button>
           <div style="position: relative; flex-grow: 1; display: flex; align-items: center;">
             <span style="position: absolute; left: 10px; color: #888;">🔎</span>
-            <input type="text" id="hobby-search" oninput="searchHobbies()" placeholder="Search" style="width: 100%; background: #1a1a24;
-             border: 1px solid #3d3d5c; color: #fff; padding: 6px 6px 6px 32px; border-radius: 20px; font-family: monospace;
-              outline: none;">
+            <input type="text" id="hobby-search" oninput="searchHobbies()" placeholder="Search" style="width: 100%; background: #1a1a24; border: 1px solid #3d3d5c; color: #fff; padding: 6px 6px 6px 32px; border-radius: 20px; font-family: monospace; outline: none;">
           </div>
-          
-          <button onclick="openHobbyFormForNew()" style="background: #50fa7b; border: none;
-           color: #000; padding: 6px 14px; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 4px;">+</button>
+          <button onclick="openHobbyFormForNew()" style="background: #50fa7b; border: none; color: #000; padding: 6px 14px; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 4px;">+</button>
         </div>
-
-        <div id="hobby-list" style="padding: 16px; overflow-y: auto; flex-grow: 1; display: flex;
-         flex-direction: column; gap: 8px;">
-          </div>
+        <div id="hobby-list" style="padding: 16px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
 
-      <div id="hobby-welcome-popup" style="position: absolute; top: 60px; left: 20px; background-color: #242433;
-       width: 260px; border: 2px solid #3d3d5c; border-radius: 6px; padding: 16px; box-sizing: border-box;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10;">
-        <span onclick="hideHobbyWelcome()" style="position: absolute; right: 10px; top: 8px; color: #ff5555;
-         cursor: pointer; font-weight: bold;">[X]</span>
+      <div id="hobby-welcome-popup" style="position: absolute; top: 60px; left: 20px; background-color: #242433; width: 260px; border: 2px solid #3d3d5c; border-radius: 6px; padding: 16px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10;">
+        <span onclick="hideHobbyWelcome()" style="position: absolute; right: 10px; top: 8px; color: #ff5555; cursor: pointer; font-weight: bold;">[X]</span>
         <h3 style="margin: 0 0 10px 0; color: #50fa7b;">HobbyTrack</h3>
-        <p style="font-size: 12px; line-height: 1.4; margin: 0;">Welcome to Hobby Track, my way to store,
-           rate and organize my freetime activities! Click the plus-icon to get started with <br>
-            your first track...</p>
+        <p style="font-size: 12px; line-height: 1.4; margin: 0;">Welcome to Hobby Track, my way to store, rate and organize my freetime activities! Click the plus-icon to get started with <br> your first track...</p>
       </div>
 
-      <div id="hobby-detail-view" style="display: none; flex-direction: column; height: 100%; width: 100%;
-       padding: 16px; box-sizing: border-box; overflow-y: auto; position: absolute; top: 0; left: 0;
-        background-color: #1a1a24; z-index: 5;">
-        
+      <div id="hobby-detail-view" style="display: none; flex-direction: column; height: 100%; width: 100%; padding: 16px; box-sizing: border-box; overflow-y: auto; position: absolute; top: 0; left: 0; background-color: #1a1a24; z-index: 5;">
         <div style="display: flex; gap: 15px; align-items: flex-start; margin-bottom: 15px;">
-          <button onclick="goBackToMain()" style="background: none; border: none; color: #50fa7b; font-size: 24px;
-           cursor: pointer; padding: 0 5px; margin-top: 5px; transform: scaleX(-1);">➔</button> 
-          
-          <input type="text" id="hobby-input-name" placeholder="Hobby Name..." style="flex-grow: 1;
-           background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; font-size: 16px; border-radius: 4px;
-            font-family: monospace;" disabled>
-          
-          <div style="width: 90px; height: 90px; background: #242433; border: 1px solid #3d3d5c; border-radius: 4px; display: flex;
-           align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer;
-           " onclick="triggerPhotoUpload()">
-            <span id="photo-placeholder-text" style="font-size: 10px;
-             color: #888; text-align: center; padding: 4px;">Choose Image</span>
+          <button onclick="goBackToMain()" style="background: none; border: none; color: #50fa7b; font-size: 24px; cursor: pointer; padding: 0 5px; margin-top: 5px; transform: scaleX(-1);">➔</button> 
+          <input type="text" id="hobby-input-name" placeholder="Hobby Name..." style="flex-grow: 1; background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; font-size: 16px; border-radius: 4px; font-family: monospace;" disabled>
+          <div style="width: 90px; height: 90px; background: #242433; border: 1px solid #3d3d5c; border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer;" onclick="triggerPhotoUpload()">
+            <span id="photo-placeholder-text" style="font-size: 10px; color: #888; text-align: center; padding: 4px;">Choose Image</span>
             <img id="hobby-photo-preview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
             <input type="file" id="hobby-file-input" accept="image/*" style="display: none;" onchange="handlePhotoSelected(event)">
           </div>
-
           <div id="hobby-stars-container" style="display: flex; gap: 4px; font-size: 20px; color: #ffb86c; margin-top: 8px;">
             <span onclick="setRating(1)" style="cursor: pointer;">☆</span>
             <span onclick="setRating(2)" style="cursor: pointer;">☆</span>
@@ -178,77 +132,90 @@
         <div style="margin-bottom: 15px;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
             <span style="color: #50fa7b; font-size: 12px;">:</span>
-            <input type="text" id="hobby-input-category" placeholder="e.g. Gaming, Sport..." style="background: #242433;
-             border: 1px solid #3d3d5c; color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace;
-              width: 200px;" disabled>
+            <input type="text" id="hobby-input-category" placeholder="e.g. Gaming, Sport..." style="background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; width: 200px;" disabled>
           </div>
-          <textarea id="hobby-input-notes" placeholder="YourNotes..." style="width: 100%; height: 100px;
-           background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; border-radius: 4px;
-            font-family: monospace;
-            resize: none; box-sizing: border-box;" disabled></textarea>
+          <textarea id="hobby-input-notes" placeholder="YourNotes..." style="width: 100%; height: 100px; background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; border-radius: 4px; font-family: monospace; resize: none; box-sizing: border-box;" disabled></textarea>
         </div>
 
         <div style="margin-bottom: 15px;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
             <span style="color: #50fa7b; font-size: 12px;">Status:</span>
-            <select id="hobby-input-status" style="background: #242433; border: 1px solid #3d3d5c; color: #fff;
-             padding: 4px 8px; border-radius: 4px; font-family: monospace; outline: none;" disabled>
+            <select id="hobby-input-status" style="background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; outline: none;" disabled>
               <option value="Aktiv">active</option>
               <option value="Pausiert">paused</option>
               <option value="Geplant">planned</option>
             </select>
           </div>
-          <textarea id="hobby-input-progress" placeholder="Progress or toughts go here..." style="width: 100%;
-           height: 100px; background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; border-radius: 4px;
-            font-family: monospace; resize: none; box-sizing: border-box;" disabled></textarea>
+          <textarea id="hobby-input-progress" placeholder="Progress or toughts go here..." style="width: 100%; height: 100px; background: #242433; border: 1px solid #3d3d5c; color: #fff; padding: 10px; border-radius: 4px; font-family: monospace; resize: none; box-sizing: border-box;" disabled></textarea>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: auto;">
-          <button id="hobby-edit-btn" onclick="enableEditMode()" style="background: #ffb86c;
-           border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;
-            display: none;">edit</button>
-          <button id="hobby-save-btn" onclick="saveCurrentHobby()" style="background: #50fa7b;
-           border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;
-            display: none;">save</button>
+          <button id="hobby-edit-btn" onclick="enableEditMode()" style="background: #ffb86c; border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none;">edit</button>
+          <button id="hobby-save-btn" onclick="saveCurrentHobby()" style="background: #50fa7b; border: none; color: #000; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; display: none;">save</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- APP 4: PIXELPAINT -->
   <div id="paintscreen" class="window" style="display: none;">
     <div id="paintscreenheader" class="window-header"> 
       <span>☰ ::: RETROS-PIXELPAINTER ::: ☰</span>
       <span id="paintclose" style="color: #ff5555; cursor: pointer; padding: 0 5px; font-family: monospace;">[X]</span>
     </div>
-    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 400px; height: 350px; display: flex;
-     flex-direction: column; align-items: center; padding: 12px; box-sizing: border-box; gap: 10px;">
+    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 400px; height: 350px; display: flex; flex-direction: column; align-items: center; padding: 12px; box-sizing: border-box; gap: 10px;">
       <div style="display: flex; gap: 10px; width: 100%; justify-content: center;">
-        <input type="color" id="paint-color" value="#50fa7b" style="background: none; border: none; cursor: pointer;
-         width: 40px; height: 30px;">
-        <button onclick="clearCanvas()" style="background: #ff5555; border: none; color: #fff; padding: 6px 12px;
-         border-radius: 4px; cursor: pointer; font-family: monospace;">Clear</button>
+        <input type="color" id="paint-color" value="#50fa7b" style="background: none; border: none; cursor: pointer; width: 40px; height: 30px;">
+        <button onclick="clearCanvas()" style="background: #ff5555; border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: monospace;">Clear</button>
       </div>
-      <canvas id="paintCanvas" width="360" height="250" style="background: #242433; border: 2px dashed #3d3d5c;
-       border-radius: 4px; cursor: crosshair;"></canvas>
+      <canvas id="paintCanvas" width="360" height="250" style="background: #242433; border: 2px dashed #3d3d5c; border-radius: 4px; cursor: crosshair;"></canvas>
     </div>
   </div>
 
-  <!-- APP 5: RETROPET -->
   <div id="petscreen" class="window" style="display: none;">
     <div id="petscreenheader" class="window-header"> 
       <span>☰ ::: RETROS-PET-V1.0 ::: ☰</span>
       <span id="petclose" style="color: #ff5555; cursor: pointer; padding: 0 5px; font-family: monospace;">[X]</span>
     </div>
-    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 300px; height: 250px; display: flex; flex-direction: column;
-     align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; font-family: monospace; color: #fff;">
+    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 300px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; font-family: monospace; color: #fff;">
       <p id="pet-status" style="color: #50fa7b; font-weight: bold; font-size: 16px; margin: 5px;">Status: Happy 🐱</p>
       <div style="font-size: 48px; margin: 15px 0;" id="pet-avatar">🐱</div>
       <p id="pet-hunger" style="margin: 5px;">Hunger: 100%</p>
-      <button onclick="feedPet()" style="background: #ffb86c; border: none; color: #000; padding: 8px 16px; border-radius: 4px; cursor: pointer;
-       font-weight: bold; font-family: monospace; margin-top: 10px;">Feed Pet</button>
+      <button onclick="feedPet()" style="background: #ffb86c; border: none; color: #000; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: monospace; margin-top: 10px;">Feed Pet</button>
     </div> 
   </div>
+
+  <div id="calculatorscreen" class="window" style="display: none;">
+    <div id="calculatorscreenheader" class="window-header"> 
+      <span>☰ ::: RETROS-CALC ::: ☰</span>
+      <span id="calculatorclose" style="color: #ff5555; cursor: pointer; padding: 0 5px; font-family: monospace;">[X]</span>
+    </div>
+    
+    <div style="background-color: #1a1a24; margin: 6px; border-radius: 8px; width: 260px; padding: 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; font-family: monospace;">
+      <input type="text" id="calc-display" readonly style="width: 100%; background: #242433; border: 1px solid #3d3d5c; color: #50fa7b; padding: 10px; font-size: 20px; text-align: right; border-radius: 4px; font-family: monospace; outline: none; box-sizing: border-box;">
+      
+      <div class="calc-buttons-grid">
+        <button onclick="clearCalc()">C</button>
+        <button onclick="pressCalc('/')">/</button>
+        <button onclick="pressCalc('*')">*</button>
+        <button onclick="pressCalc('-')">-</button>
+        <button onclick="pressCalc('7')">7</button>
+        <button onclick="pressCalc('8')">8</button>
+        <button onclick="pressCalc('9')">9</button>
+        <button onclick="pressCalc('+')">+</button>
+        <button onclick="pressCalc('4')">4</button>
+        <button onclick="pressCalc('5')">5</button>
+        <button onclick="pressCalc('6')">6</button>
+        <button onclick="calculateResult()">=</button>
+        <button onclick="pressCalc('1')">1</button>
+        <button onclick="pressCalc('2')">2</button>
+        <button onclick="pressCalc('3')">3</button>
+        <button onclick="pressCalc('.')">.</button>
+        <button onclick="pressCalc('0')" style="grid-column: span 4;">0</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="taskbar"></div>
 
   <script src="script.js"></script>
 </body>

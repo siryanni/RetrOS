@@ -1,3 +1,9 @@
+body, button, input, textarea, select {
+  font-family: 'VT323', monospace !important;
+  /* Da Pixel-Fonts oft etwas kleiner wirken, erhöhen wir die Standard-Größe leicht */
+  font-size: 18px; 
+}
+
 .window {
   border: solid;
   width: fit-content;
@@ -63,4 +69,71 @@
   accent-color: #ff5555;
   width: 16px;
   height: 16px;
+}
+
+.calc-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.calc-buttons-grid button {
+  background: #242433;
+  border: 1px solid #3d3d5c;
+  color: #fff;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.calc-buttons-grid button:hover {
+  background: #3d3d5c;
+  color: #50fa7b;
+}
+
+.taskbar-item {
+  background: #1a1a24;
+  border: 1px solid #3d3d5c;
+  color: #fff;
+  padding: 6px 12px;
+  font-family: monospace;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.1s ease;
+}
+
+.taskbar-item:hover {
+  background: #2e2e3a;
+  border-color: #50fa7b;
+}
+
+.taskbar-item.active {
+  border-color: #50fa7b;
+  color: #50fa7b;
+  background: #242433;
+}
+
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background-color: rgba(36, 36, 51, 0.85);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid #3d3d5c;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  z-index: 999999;
 }

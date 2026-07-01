@@ -13,9 +13,64 @@ function handleIconDoubleTap(id) {
   if (document.querySelector(id)) openWindow(document.querySelector(id));
 }
 
-function closeWindow(el) { el.style.display = "none"; }
-function openWindow(el) { el.style.display = "block"; biggestIndex++; el.style.zIndex = biggestIndex; topBar.style.zIndex = biggestIndex + 1; }
-function handleWindowTap(el) { biggestIndex++; el.style.zIndex = biggestIndex; topBar.style.zIndex = biggestIndex + 1; deselectIcon(selectedIcon); }
+// --- WINDOW LOGIC & TASKBAR SYSTEM ---
+function updateTaskbar() {
+  const taskbar = document.querySelector("#taskbar");
+  if (!taskbar) return;
+  taskbar.innerHTML = ""; 
+
+  const windows = document.querySelectorAll(".window");
+  
+  windows.forEach(win => {
+    if (win.style.display === "block" || win.hasAttribute("data-open")) {
+      const btn = document.createElement("button");
+      btn.classList.add("taskbar-item");
+      
+      const headerText = win.querySelector(".window-header span")?.innerText || "App";
+      btn.innerText = headerText.replace(/☰|:::|:/g, "").trim();
+      
+      if (win.style.zIndex == biggestIndex && win.style.display === "block") {
+        btn.classList.add("active");
+      }
+      
+      btn.addEventListener("click", () => {
+        if (win.style.display === "block" && win.style.zIndex == biggestIndex) {
+          win.style.display = "none"; 
+        } else {
+          win.style.display = "block"; 
+          handleWindowTap(win);
+        }
+        updateTaskbar();
+      });
+      
+      taskbar.appendChild(btn);
+    }
+  });
+}
+
+function openWindow(el) { 
+  el.style.display = "block"; 
+  el.setAttribute("data-open", "true"); 
+  biggestIndex++; 
+  el.style.zIndex = biggestIndex; 
+  topBar.style.zIndex = biggestIndex + 1; 
+  updateTaskbar();
+}
+
+function closeWindow(el) { 
+  el.style.display = "none"; 
+  el.removeAttribute("data-open"); 
+  updateTaskbar();
+}
+
+function handleWindowTap(el) { 
+  biggestIndex++; 
+  el.style.zIndex = biggestIndex; 
+  topBar.style.zIndex = biggestIndex + 1; 
+  deselectIcon(selectedIcon); 
+  updateTaskbar();
+}
+
 function addWindowTapHandling(el) { el.addEventListener("mousedown", () => handleWindowTap(el)); }
 
 function dragElement(elmnt) {
@@ -41,9 +96,13 @@ function initializeWindow(windowId, closeButtonId) {
 initializeWindow("welcomescreen", "welcomeclose");
 initializeWindow("micromemoscreen", "micromemoclose");
 initializeWindow("hobbytrackscreen", "hobbytrackclose");
+initializeWindow("paintscreen", "paintclose");
+initializeWindow("petscreen", "petclose");
+initializeWindow("calculatorscreen", "calculatorclose"); 
 
 document.querySelector("#welcomeopen").addEventListener("click", () => openWindow(document.querySelector("#welcomescreen")));
 
+// --- APP: MICROMEMO (DEVLOG) ---
 var devlogs = JSON.parse(localStorage.getItem("retros_devlogs")) || [{ title: "RetrOS v0.1.5 Start", text: "Das System wurde erfolgreich initialisiert." }];
 
 function renderDevlogSidebar() {
@@ -66,8 +125,126 @@ function saveDevlog() {
 
 function deleteDevlog(i, e) { e.stopPropagation(); devlogs.splice(i, 1); localStorage.setItem("retros_devlogs", JSON.stringify(devlogs)); clearFields(); renderDevlogSidebar(); }
 function clearFields() { document.querySelector("#devlog-title").value = ""; document.querySelector("#devlog-text").value = ""; }
+
+function exportDevlog() {
+  var title = document.querySelector("#devlog-title").value.trim();
+  var text = document.querySelector("#devlog-text").value.trim();
+  if (!text) return;
+  if (!title) title = "untitled_devlog";
+  var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  var tempLink = document.createElement("a");
+  tempLink.href = URL.createObjectURL(blob);
+  tempLink.download = title.toLowerCase().replace(/\s+/g, "_") + ".txt";
+  tempLink.click();
+  URL.revokeObjectURL(tempLink.href);
+}
+
 renderDevlogSidebar();
 
+// --- SYSTEM CLOCK ---
+function updateClock() {
+  var el = document.querySelector("#os-time"); if (!el) return;
+  var d = new Date(), h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+  el.innerHTML = "<br>" + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+}
+setInterval(updateClock, 1000); updateClock();
+
+// --- APP: PIXELPAINT ---
+const canvas = document.getElementById("paintCanvas");
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+
+  canvas.addEventListener("mousedown", () => drawing = true);
+  canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener("mousemove", draw);
+
+  function draw(e) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = document.getElementById("paint-color").value;
+
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  }
+}
+function clearCanvas() {
+  const canvas = document.getElementById("paintCanvas");
+  if (canvas) canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// --- APP: RETROPET ---
+let hunger = parseInt(localStorage.getItem("retros_pet_hunger")) || 100;
+
+function updatePetUI() {
+  const hungerEl = document.getElementById("pet-hunger");
+  const avatarEl = document.getElementById("pet-avatar");
+  const statusEl = document.getElementById("pet-status");
+  if (!hungerEl) return;
+
+  hungerEl.innerText = "Hunger: " + hunger + "%";
+  if (hunger <= 0) {
+    avatarEl.innerText = "👻";
+    statusEl.innerText = "Status: Dead... RIP";
+    statusEl.style.color = "#ff5555";
+  } else if (hunger < 40) {
+    avatarEl.innerText = "😾";
+    statusEl.innerText = "Status: Starving!";
+    statusEl.style.color = "#ffb86c";
+  } else {
+    avatarEl.innerText = "🐱";
+    statusEl.innerText = "Status: Happy";
+    statusEl.style.color = "#50fa7b";
+  }
+}
+
+function feedPet() {
+  if (hunger <= 0) { hunger = 100; }
+  else { hunger = Math.min(100, hunger + 20); }
+  localStorage.setItem("retros_pet_hunger", hunger);
+  updatePetUI();
+}
+
+setInterval(() => {
+  if (hunger > 0) {
+    hunger = Math.max(0, hunger - 5);
+    localStorage.setItem("retros_pet_hunger", hunger);
+    updatePetUI();
+  }
+}, 8000);
+
+updatePetUI();
+
+// --- APP: CALC-95 ---
+function pressCalc(value) {
+  const display = document.getElementById("calc-display");
+  if (display) {
+    if (display.value === "Error") display.value = "";
+    display.value += value;
+  }
+}
+
+function clearCalc() {
+  const display = document.getElementById("calc-display");
+  if (display) display.value = "";
+}
+
+function calculateResult() {
+  const display = document.getElementById("calc-display");
+  if (display && display.value.trim() !== "") {
+    try {
+      display.value = eval(display.value);
+    } catch (error) {
+      display.value = "Error";
+    }
+  }
+}
+
+// --- APP: HOBBYTRACK ---
 var hobbies = JSON.parse(localStorage.getItem("retros_hobbies")) || [], currentHobbyIndex = -1, currentRating = 0, currentPhotoBase64 = "", isBatchMode = false;
 var hFields = ["name", "category", "notes", "status", "progress"];
 
@@ -144,86 +321,4 @@ function goBackToMain() { document.querySelector("#hobby-detail-view").style.dis
 function searchHobbies() { renderHobbyList(); }
 
 renderHobbyList();
-
-function updateClock() {
-  var el = document.querySelector("#os-time"); if (!el) return;
-  var d = new Date(), h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
-  el.innerHTML = "<br>" + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-}
-setInterval(updateClock, 1000); updateClock();
-
-// Fenster für die neuen Apps beim System registrieren
-initializeWindow("paintscreen", "paintclose");
-initializeWindow("petscreen", "petclose");
-
-// --- LOGIK: PIXELPAINT ---
-const canvas = document.getElementById("paintCanvas");
-if (canvas) {
-  const ctx = canvas.getContext("2d");
-  let drawing = false;
-
-  canvas.addEventListener("mousedown", () => drawing = true);
-  canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
-  canvas.addEventListener("mousemove", draw);
-
-  function draw(e) {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineWidth = 4;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = document.getElementById("paint-color").value;
-
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-  }
-}
-function clearCanvas() {
-  const canvas = document.getElementById("paintCanvas");
-  if (canvas) canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-}
-
-// --- LOGIK: RETROPET ---
-let hunger = parseInt(localStorage.getItem("retros_pet_hunger")) || 100;
-
-function updatePetUI() {
-  const hungerEl = document.getElementById("pet-hunger");
-  const avatarEl = document.getElementById("pet-avatar");
-  const statusEl = document.getElementById("pet-status");
-  if (!hungerEl) return;
-
-  hungerEl.innerText = "Hunger: " + hunger + "%";
-  if (hunger <= 0) {
-    avatarEl.innerText = "👻";
-    statusEl.innerText = "Status: Dead... RIP";
-    statusEl.style.color = "#ff5555";
-  } else if (hunger < 40) {
-    avatarEl.innerText = "😾";
-    statusEl.innerText = "Status: Starving!";
-    statusEl.style.color = "#ffb86c";
-  } else {
-    avatarEl.innerText = "🐱";
-    statusEl.innerText = "Status: Happy";
-    statusEl.style.color = "#50fa7b";
-  }
-}
-
-function feedPet() {
-  if (hunger <= 0) { hunger = 100; } // Wiederbeleben, falls tot
-  else { hunger = Math.min(100, hunger + 20); }
-  localStorage.setItem("retros_pet_hunger", hunger);
-  updatePetUI();
-}
-
-// Lass das Haustier alle 8 Sekunden hungriger werden
-setInterval(() => {
-  if (hunger > 0) {
-    hunger = Math.max(0, hunger - 5);
-    localStorage.setItem("retros_pet_hunger", hunger);
-    updatePetUI();
-  }
-}, 8000);
-
-// Beim Start einmal die UI laden
-updatePetUI();
+updateTaskbar();
